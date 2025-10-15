@@ -80,7 +80,6 @@ git clone https://github.com/tuusuario/LashesLam-iOS.git
 
 🧑‍💻 Autor
 
-Alejandro Mejía
 📍 México
 💼 iOS Developer
 📧 mevi.and.my.monkey@gmail.com
