@@ -10,9 +10,33 @@
 		79FF26352EA066D700F11A47 /* LashesLam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LashesLam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		799B3C9D2EA4923E008FB43A /* Exceptions for "LashesLam" folder in "LashesLam" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				LashesLam.xcdatamodeld,
+			);
+			target = 79FF26342EA066D700F11A47 /* LashesLam */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		799B3C9E2EA4923E008FB43A /* Exceptions for "LashesLam" folder in "Compile Sources" phase from "LashesLam" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 79FF26312EA066D700F11A47 /* Sources */;
+			membershipExceptions = (
+				LashesLam.xcdatamodeld,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		79FF26372EA066D700F11A47 /* LashesLam */ = {
+		799B3C912EA4923E008FB43A /* LashesLam */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				799B3C9D2EA4923E008FB43A /* Exceptions for "LashesLam" folder in "LashesLam" target */,
+				799B3C9E2EA4923E008FB43A /* Exceptions for "LashesLam" folder in "Compile Sources" phase from "LashesLam" target */,
+			);
 			path = LashesLam;
 			sourceTree = "<group>";
 		};
@@ -32,8 +56,8 @@
 		79FF262C2EA066D700F11A47 = {
 			isa = PBXGroup;
 			children = (
-				79FF26372EA066D700F11A47 /* LashesLam */,
 				79FF26362EA066D700F11A47 /* Products */,
+				799B3C912EA4923E008FB43A /* LashesLam */,
 			);
 			sourceTree = "<group>";
 		};
@@ -61,7 +85,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				79FF26372EA066D700F11A47 /* LashesLam */,
+				799B3C912EA4923E008FB43A /* LashesLam */,
 			);
 			name = LashesLam;
 			packageProductDependencies = (
