@@ -1,85 +1,54 @@
-💜 LashesLam (iOS)
+# LashesLam iOS
 
-LashesLam es una aplicación iOS moderna desarrollada con SwiftUI, diseñada para un estudio de belleza que ofrece múltiples servicios en un solo lugar:
-venta de productos, inscripción a cursos, reserva de citas y visualización de eventos o promociones.
+App iOS nativa (SwiftUI) de **LashesLam**, portada desde la app Android. Consume el **mismo backend
+de Firebase** (`lasheslam-ed6cf`): Firestore, Auth, Storage, Remote Config — por lo que comparte
+datos, usuarios y administradores con la app Android.
 
-✨ Características principales
+## Estado (Etapa 1)
 
-🛍️ Tienda online: Explora y compra artículos de belleza directamente desde la app.
+Implementado: proyecto + Firebase (SPM), tema/colores, splash, **login/registro con email**,
+**Google Sign-In**, gestión de sesión y detección de admin vía Remote Config. `HomeView` es un stub.
 
-🎓 Cursos y capacitaciones: Aprende nuevas técnicas y adquiere cursos especializados.
+Pendiente (etapas siguientes): tienda + carrito, cursos + inscripciones, servicios + citas,
+favoritos, perfil con foto y funciones de administrador.
 
-📅 Agendamiento de citas: Reserva servicios fácilmente según la disponibilidad del estudio.
+## Arquitectura
 
-🎉 Eventos y promociones: Consulta eventos, descuentos y promociones vigentes.
+MVVM + Clean, espejando la app Android:
 
-💬 Notificaciones y comunicación: Mantente informado sobre nuevos cursos, productos y citas.
-
-🧩 Tecnologías y herramientas
-Categoría	Tecnología
-UI	SwiftUI
-Arquitectura	MVVM + Clean Architecture
-Base de datos / Backend	Firebase Firestore
-Autenticación	Firebase Auth
-Almacenamiento	Firebase Storage
-Inyección de dependencias	Swift Concurrency + Protocol Injection
-Navegación	NavigationStack / NavigationPath
-Asincronía / Estado	Combine + async/await
-Diseño	SwiftUI + SF Symbols + iOS Human Interface Guidelines
-
-📱 Estructura del proyecto
+```
 LashesLam/
-├── Data/
-│   ├── Models/
-│   ├── Repositories/
-│   └── Datasources/
-├── Domain/
-│   ├── Entities/
-│   ├── UseCases/
-│   └── Interfaces/
-├── Presentation/
-│   ├── Components/
-│   ├── Screens/
-│   │   ├── Home/
-│   │   ├── Shop/
-│   │   ├── Courses/
-│   │   ├── Appointments/
-│   │   └── Profile/
-│   └── Navigation/
-├── DI/
-└── Utils/
+├── App/          LashesLamApp (entry), AppRootView (splash→login→home)
+├── Core/         Theme (AppColors, Typography), Result (Resource), Error (AppError, ErrorMapper)
+├── Data/         Constants (FirestorePaths, StoragePaths), Dto, Models, Repositories
+├── Session/      SessionManager (estado global observable)
+├── Features/     Splash, Auth (LoginViewModel + vistas), Home
+└── Components/    PrimaryButton, OutlinedButton, WavyBackground
+```
 
-🚀 Próximas funcionalidades
+## Requisitos
 
- Integrar pasarela de pago (MercadoPago).
+- Xcode 16+ y un simulador iOS.
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) para (re)generar el proyecto: `brew install xcodegen`.
 
- Sistema de reseñas y valoraciones.
+## Configuración inicial (una vez)
 
- Panel administrativo (versión web con SwiftUI para macOS o React).
+1. **Registrar la app iOS en Firebase Console** del proyecto `lasheslam-ed6cf`:
+   *Agregar app → iOS*, Bundle ID `com.mevi.lasheslam.ios`.
+2. Descargar **`GoogleService-Info.plist`** y colocarlo en `LashesLam/GoogleService-Info.plist`.
+3. En Authentication → Sign-in method, confirmar **Email/Password** y **Google** habilitados.
+4. En `LashesLam/Info.plist`, reemplazar `REVERSED_CLIENT_ID_PLACEHOLDER` por el valor
+   `REVERSED_CLIENT_ID` que viene dentro del `GoogleService-Info.plist` (URL Scheme para Google).
 
- Implementar notificaciones push (Firebase Cloud Messaging / APNs).
+## Generar y compilar
 
- Modo oscuro y personalización de tema con AppStorage.
+```bash
+xcodegen generate
+open LashesLam.xcodeproj
+# o por línea de comandos:
+xcodebuild -project LashesLam.xcodeproj -scheme LashesLam \
+  -destination 'platform=iOS Simulator,name=iPhone 17' build
+```
 
-🧠 Objetivos del proyecto
-
-Este proyecto busca:
-
-Crear una app real y útil para la gestión de un estudio de belleza.
-
-⚙️ Configuración e instalación
-
-Clonar el repositorio:
-
-git clone https://github.com/tuusuario/LashesLam-iOS.git
-
-
-
-📸 Capturas (pendiente)
-
-
-🧑‍💻 Autor
-
-📍 México
-💼 iOS Developer
-📧 mevi.and.my.monkey@gmail.com
+> El proyecto (`LashesLam.xcodeproj`) se genera desde `project.yml`. Si editas dependencias o
+> estructura, vuelve a correr `xcodegen generate`.
