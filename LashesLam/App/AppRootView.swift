@@ -2,7 +2,7 @@
 //  AppRootView.swift
 //  LashesLam
 //
-//  Decide la pantalla raíz: Splash → (Login | Home) según la sesión de Firebase.
+//  Decide la pantalla raíz: Splash → (Login | Main) según la sesión de Firebase.
 //
 
 import SwiftUI
@@ -12,12 +12,13 @@ import FirebaseAuth
 struct AppRootView: View {
 
     private enum Route {
-        case splash, login, home
+        case splash, login, main
     }
 
     @State private var route: Route = .splash
     @StateObject private var loginViewModel = LoginViewModel()
     @StateObject private var session = SessionManager.shared
+    @AppStorage("isDarkMode") private var isDarkMode = false
 
     private let sessionRepository = SessionRepository()
 
@@ -28,13 +29,14 @@ struct AppRootView: View {
                 SplashScreen(onFinished: handleSplashFinished)
             case .login:
                 LogInView(viewModel: loginViewModel)
-            case .home:
-                HomeView()
+            case .main:
+                MainTabView(onLogout: handleLogout)
             }
         }
         .environmentObject(session)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
         .onChange(of: loginViewModel.navigateToHome) { goHome in
-            if goHome { withAnimation { route = .home } }
+            if goHome { withAnimation { route = .main } }
         }
     }
 
@@ -47,10 +49,15 @@ struct AppRootView: View {
         if Auth.auth().currentUser != nil {
             Task {
                 await sessionRepository.refreshSession()
-                await MainActor.run { withAnimation { route = .home } }
+                await MainActor.run { withAnimation { route = .main } }
             }
         } else {
             withAnimation { route = .login }
         }
+    }
+
+    private func handleLogout() {
+        loginViewModel.navigateToHome = false
+        withAnimation { route = .login }
     }
 }

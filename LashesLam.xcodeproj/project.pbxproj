@@ -14,6 +14,7 @@
 		1E0DB9E9336AB21424348E62 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF77DC3467E10B6D3471FA6 /* UserRepository.swift */; };
 		216DC0078E28DEDA8A3D06E6 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 3905020605EAC460E716C759 /* FirebaseRemoteConfig */; };
 		24B3D67D3310156C8FF160CB /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 031C7709DE30C9C9AB8D5153 /* FirebaseAnalytics */; };
+		326635E581AF00FB63A03F90 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF82CE3D8C8B58730B9200E /* ProfilePageView.swift */; };
 		383B8D17EE06814785BCD054 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9079BF9CEB432CED72FC0C /* Typography.swift */; };
 		443EDA4B62A83A3B010BB7B4 /* ErrorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A087D05E003E92D09BA1 /* ErrorMapper.swift */; };
 		4E43E2E30AFCA647605E0F75 /* LoginSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8062979E1EF75C12B14BD0 /* LoginSheetView.swift */; };
@@ -33,21 +34,30 @@
 		835D41BABE5BB95E1F938E4E /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FB9F0462D02E7EF2415B8B /* AppColors.swift */; };
 		843FA0D090A2D7AD793E67F1 /* FirestorePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BFDF94341543DB02A9E792 /* FirestorePaths.swift */; };
 		8C41D29D7E80DC2A5EBEBE13 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 915A29FBE1085C6E5C932975 /* GoogleSignIn */; };
+		8D52BCCDE4272D2ACBAB63FB /* ProfileOptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBC50E24953F67AA6EE62F2 /* ProfileOptionButton.swift */; };
+		A0BCBAB07C7E6C82EDE71215 /* EditAddressSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB55C788BAC899AF706A4A51 /* EditAddressSheet.swift */; };
 		A6812B384FA6A556BA8D8AD9 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E4A4BF0B23206CBBFE2B10 /* LoginViewModel.swift */; };
+		B633B6AFE861B419E488D4BE /* EditPhoneSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44EF5548168B474BE446075A /* EditPhoneSheet.swift */; };
 		C0ED6E2D89D371CD2ECBDB13 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CF8514C334056492958B50AC /* GoogleService-Info.plist */; };
 		C38E6B9942F7D925B65F7910 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D82E013B6E61AC359E46F2D /* AppError.swift */; };
 		C6B6FD49C8F3F92D19DB801B /* UIApplication+RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60EA5B030ACBD54C39BB90B /* UIApplication+RootVC.swift */; };
 		C80EA3B7A511CA2B663A480A /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 31DF2CE2D99A0C403D73DFF7 /* GoogleSignInSwift */; };
 		CF1BED16A286EC527FEA7B29 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF1151E1F60A9A67BFD9270 /* Resource.swift */; };
+		D8D6F05B904B268BB400160C /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964F33DBF94AF986DC6F9C00 /* ProfileViewModel.swift */; };
 		DA0A989AF8F44C2301B078CA /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C44DE8E27CC54A35B119AF9 /* SessionManager.swift */; };
 		E1F43F987C010C5C7B2E9255 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8D3E68F3DB51A05F9EBF56 /* HomeView.swift */; };
+		ED56C1BAA6BB6CC6F0DBB303 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2543ABA1F30C4A8BA88D1D /* MainTabView.swift */; };
 		FAEBB1EA9DC8B200FAD7A005 /* LashesLamApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576308E9606B344325709ED8 /* LashesLamApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		19E4A4BF0B23206CBBFE2B10 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		1DBC50E24953F67AA6EE62F2 /* ProfileOptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileOptionButton.swift; sourceTree = "<group>"; };
 		1DF1151E1F60A9A67BFD9270 /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		29A0F0E8FC3EC144F7EEDCCD /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		2CF82CE3D8C8B58730B9200E /* ProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePageView.swift; sourceTree = "<group>"; };
+		2F2543ABA1F30C4A8BA88D1D /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		44EF5548168B474BE446075A /* EditPhoneSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneSheet.swift; sourceTree = "<group>"; };
 		460C02B45870F5C332D84B94 /* LocationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItem.swift; sourceTree = "<group>"; };
 		47FB9F0462D02E7EF2415B8B /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		4F7E1CC776C197327FA5E825 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
@@ -60,10 +70,12 @@
 		7380EAC7B7EA54441C77B59F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B1EA1AB1685065AA75BD63C /* LashesLamConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LashesLamConfig.swift; sourceTree = "<group>"; };
 		7D82E013B6E61AC359E46F2D /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
-		85E949FC7A0C0E79828D6DE9 /* LashesLam.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LashesLam.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		85E949FC7A0C0E79828D6DE9 /* LashesLam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LashesLam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FE86547EEAC45F3241813F1 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
+		964F33DBF94AF986DC6F9C00 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		983677B9198B93AED77D6FC1 /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
 		9A94C6A6BCBD8619C7521D96 /* WavyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavyBackground.swift; sourceTree = "<group>"; };
+		AB55C788BAC899AF706A4A51 /* EditAddressSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressSheet.swift; sourceTree = "<group>"; };
 		AD8D3E68F3DB51A05F9EBF56 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B2F0A087D05E003E92D09BA1 /* ErrorMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMapper.swift; sourceTree = "<group>"; };
 		BA993270B6E20382B08293E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -136,6 +148,8 @@
 			children = (
 				975E7E43E78AC618CE4C0F80 /* Auth */,
 				8997D7F103497501BDFCB4C0 /* Home */,
+				A17E32487AE94ABBBB7018FF /* Main */,
+				7C7B739CEF4D47E95801F7A3 /* Profile */,
 				67440B929F53D27540D29ABD /* Splash */,
 			);
 			path = Features;
@@ -173,6 +187,17 @@
 				85E949FC7A0C0E79828D6DE9 /* LashesLam.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7C7B739CEF4D47E95801F7A3 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				AB55C788BAC899AF706A4A51 /* EditAddressSheet.swift */,
+				44EF5548168B474BE446075A /* EditPhoneSheet.swift */,
+				2CF82CE3D8C8B58730B9200E /* ProfilePageView.swift */,
+				964F33DBF94AF986DC6F9C00 /* ProfileViewModel.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		818D494AA97E5523500CA527 /* Dto */ = {
@@ -220,10 +245,19 @@
 			path = Session;
 			sourceTree = "<group>";
 		};
+		A17E32487AE94ABBBB7018FF /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				2F2543ABA1F30C4A8BA88D1D /* MainTabView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		AEC8567084D2062D6E3C0A93 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				29A0F0E8FC3EC144F7EEDCCD /* PrimaryButton.swift */,
+				1DBC50E24953F67AA6EE62F2 /* ProfileOptionButton.swift */,
 				9A94C6A6BCBD8619C7521D96 /* WavyBackground.swift */,
 			);
 			path = Components;
@@ -312,8 +346,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 42D0B4B85209AEF2B81122C3 /* Build configuration list for PBXProject "LashesLam" */;
 			developmentRegion = en;
@@ -358,6 +390,8 @@
 				835D41BABE5BB95E1F938E4E /* AppColors.swift in Sources */,
 				C38E6B9942F7D925B65F7910 /* AppError.swift in Sources */,
 				633B42F1B206A8AB3ECCF9D1 /* AppRootView.swift in Sources */,
+				A0BCBAB07C7E6C82EDE71215 /* EditAddressSheet.swift in Sources */,
+				B633B6AFE861B419E488D4BE /* EditPhoneSheet.swift in Sources */,
 				443EDA4B62A83A3B010BB7B4 /* ErrorMapper.swift in Sources */,
 				843FA0D090A2D7AD793E67F1 /* FirestorePaths.swift in Sources */,
 				E1F43F987C010C5C7B2E9255 /* HomeView.swift in Sources */,
@@ -367,7 +401,11 @@
 				791C3C2F699A5D78D212BD4B /* LogInView.swift in Sources */,
 				4E43E2E30AFCA647605E0F75 /* LoginSheetView.swift in Sources */,
 				A6812B384FA6A556BA8D8AD9 /* LoginViewModel.swift in Sources */,
+				ED56C1BAA6BB6CC6F0DBB303 /* MainTabView.swift in Sources */,
 				655484C7396307735A538A8C /* PrimaryButton.swift in Sources */,
+				8D52BCCDE4272D2ACBAB63FB /* ProfileOptionButton.swift in Sources */,
+				326635E581AF00FB63A03F90 /* ProfilePageView.swift in Sources */,
+				D8D6F05B904B268BB400160C /* ProfileViewModel.swift in Sources */,
 				62762FAC5D5950411E8B1951 /* RegisterSheetView.swift in Sources */,
 				CF1BED16A286EC527FEA7B29 /* Resource.swift in Sources */,
 				DA0A989AF8F44C2301B078CA /* SessionManager.swift in Sources */,
@@ -392,6 +430,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8W7DB6MJB;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LashesLam/Info.plist;
@@ -534,6 +573,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8W7DB6MJB;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LashesLam/Info.plist;
