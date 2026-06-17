@@ -2,6 +2,12 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+## Build artifacts (NO commitear: contienen checkouts de SPM/Firebase >100MB)
+build/
+DerivedData/
+*.xcuserstate
+.DS_Store
+
 ## User settings
 xcuserdata/
 
