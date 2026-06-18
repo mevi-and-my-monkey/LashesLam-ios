@@ -20,6 +20,9 @@ struct CatalogHomeView: View {
     }
 
     @State private var section: Section = .cursos
+    @State private var showProductForm = false
+    @State private var showServiceForm = false
+    @State private var showCourseForm = false
 
     var body: some View {
         NavigationStack {
@@ -36,6 +39,24 @@ struct CatalogHomeView: View {
             .background(AppColors.background.ignoresSafeArea())
             .navigationTitle("LashesLam")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if session.isUserAdmin {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button { onAdminAdd() } label: { Image(systemName: "plus") }
+                    }
+                }
+            }
+            .sheet(isPresented: $showProductForm) { ProductFormView() }
+            .sheet(isPresented: $showServiceForm) { ServiceFormView() }
+            .sheet(isPresented: $showCourseForm) { CourseFormView() }
+        }
+    }
+
+    private func onAdminAdd() {
+        switch section {
+        case .productos: showProductForm = true
+        case .servicios: showServiceForm = true
+        case .cursos: showCourseForm = true
         }
     }
 

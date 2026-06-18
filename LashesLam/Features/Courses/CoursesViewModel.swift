@@ -18,6 +18,9 @@ final class CoursesViewModel: ObservableObject {
 
     init(repository: CoursesRepository = CoursesRepository()) {
         self.repository = repository
+        NotificationCenter.default.addObserver(forName: .catalogDidChange, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.load() }
+        }
     }
 
     func load() {

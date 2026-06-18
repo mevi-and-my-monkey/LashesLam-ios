@@ -13,9 +13,14 @@ struct ProductDetailView: View {
     let product: ProductItem
     @EnvironmentObject var session: SessionManager
     @ObservedObject private var cart = CartManager.shared
+    @Environment(\.dismiss) private var dismiss
 
     @State private var quantity = 1
     @State private var addedToCart = false
+    @State private var showEditForm = false
+    @State private var showDeleteConfirm = false
+    @State private var isDeleting = false
+    private let productsRepository = ProductsRepository()
 
     var body: some View {
         ScrollView {
@@ -83,7 +88,32 @@ struct ProductDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                FavoriteHeartButton(itemId: product.id, type: .product, bare: true)
+                if session.isUserAdmin {
+                    Menu {
+                        Button { showEditForm = true } label: { Label("Editar", systemImage: "pencil") }
+                        Button(role: .destructive) { showDeleteConfirm = true } label: { Label("Eliminar", systemImage: "trash") }
+                    } label: { Image(systemName: "ellipsis.circle") }
+                } else {
+                    FavoriteHeartButton(itemId: product.id, type: .product, bare: true)
+                }
+            }
+        }
+        .sheet(isPresented: $showEditForm) { ProductFormView(product: product) }
+        .confirmationDialog("¿Eliminar este producto?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            Button("Eliminar", role: .destructive) { deleteProduct() }
+            Button("Cancelar", role: .cancel) {}
+        }
+        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
+    }
+
+    private func deleteProduct() {
+        Task {
+            isDeleting = true
+            let result = await productsRepository.deleteProduct(id: product.id, imageUrls: product.images)
+            isDeleting = false
+            if case .success = result {
+                NotificationCenter.default.post(name: .catalogDidChange, object: nil)
+                dismiss()
             }
         }
     }

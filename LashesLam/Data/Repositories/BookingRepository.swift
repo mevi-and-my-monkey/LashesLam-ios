@@ -53,6 +53,19 @@ final class BookingRepository {
         }
     }
 
+    /// Guarda la disponibilidad del servicio (admin). schedule: fecha → [{time, occupied}].
+    func saveAvailability(serviceId: String, schedule: [String: [BookingSlot]]) async -> Resource<Bool> {
+        do {
+            let data = schedule.mapValues { slots in
+                slots.map { ["time": $0.time, "occupied": $0.occupied] as [String: Any] }
+            }
+            try await availabilityRef(serviceId).setData(["schedule": data])
+            return .success(true)
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
     /// Horarios ya reservados (pendiente/agendado) para un servicio y fecha.
     func getTakenSlots(serviceId: String, date: String) async -> Resource<[String]> {
         do {

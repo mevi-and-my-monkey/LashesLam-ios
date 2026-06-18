@@ -8,10 +8,12 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 final class CoursesRepository {
 
     private var firestore: Firestore { Firestore.firestore() }
+    private var storage: Storage { Storage.storage() }
 
     /// Estados de inscripción (Constants.Course de Android).
     enum CourseStatus {
@@ -123,5 +125,91 @@ final class CoursesRepository {
         } catch {
             return .failure(ErrorMapper.map(error))
         }
+    }
+
+    // MARK: - Admin: crear / editar / eliminar (espejo de CoursesRepositoryImpl)
+
+    struct CourseForm {
+        var id: String = ""
+        var titulo: String
+        var descripcion: String
+        var fecha: String        // dd/MM/yyyy
+        var horaInicio: String   // HH:mm
+        var horaFin: String      // HH:mm
+        var costo: String
+        var apartar: String
+        var instructora: String
+        var instructoraDesc: String
+        var temarios: [String]
+        var ubicacionNombre: String?
+        var lat: Double?
+        var lng: Double?
+        var newCourseImage: Data?
+        var newInstructorImage: Data?
+        var currentImageUrl: String = ""
+        var currentInstructorImageUrl: String = ""
+    }
+
+    func createCourse(_ form: CourseForm) async -> Resource<Void> {
+        do {
+            let id = UUID().uuidString
+            let courseUrl = try await uploadImage(form.newCourseImage, path: "courses/\(id)/course.jpg") ?? ""
+            let instructorUrl = try await uploadImage(form.newInstructorImage, path: "courses/\(id)/instructor.jpg") ?? ""
+            try await coursesCollection.document(id).setData(dto(form, id: id, image: courseUrl, instructorImage: instructorUrl))
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    func updateCourse(_ form: CourseForm) async -> Resource<Void> {
+        do {
+            let courseUrl = try await uploadImage(form.newCourseImage, path: "courses/\(form.id)/course.jpg") ?? form.currentImageUrl
+            let instructorUrl = try await uploadImage(form.newInstructorImage, path: "courses/\(form.id)/instructor.jpg") ?? form.currentInstructorImageUrl
+            try await coursesCollection.document(form.id).setData(dto(form, id: form.id, image: courseUrl, instructorImage: instructorUrl))
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    func deleteCourse(id: String, imageUrl: String) async -> Resource<Void> {
+        do {
+            if !imageUrl.isEmpty { try? await storage.reference(forURL: imageUrl).delete() }
+            try await coursesCollection.document(id).delete()
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    private func dto(_ form: CourseForm, id: String, image: String, instructorImage: String) -> [String: Any] {
+        var data: [String: Any] = [
+            "id": id,
+            "titulo": form.titulo,
+            "descripcion": form.descripcion,
+            "horaIncio": form.horaInicio,   // clave con el typo tal cual está en Firestore
+            "horaFin": form.horaFin,
+            "fecha": form.fecha,
+            "costo": form.costo,
+            "apartar": form.apartar,
+            "instructora": form.instructora,
+            "instructoraDesc": form.instructoraDesc,
+            "temarios": form.temarios,
+            "imagen": image,
+            "instructoraImage": instructorImage,
+            "banner": 0
+        ]
+        if let name = form.ubicacionNombre { data["ubicacionNombre"] = name }
+        if let lat = form.lat { data["lat"] = lat }
+        if let lng = form.lng { data["lng"] = lng }
+        return data
+    }
+
+    private func uploadImage(_ data: Data?, path: String) async throws -> String? {
+        guard let data else { return nil }
+        let ref = storage.reference().child(path)
+        _ = try await ref.putDataAsync(data)
+        return try await ref.downloadURL().absoluteString
     }
 }

@@ -22,6 +22,9 @@ final class ServicesViewModel: ObservableObject {
 
     init(repository: ServicesRepository = ServicesRepository()) {
         self.repository = repository
+        NotificationCenter.default.addObserver(forName: .catalogDidChange, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.load() }
+        }
     }
 
     func load() {

@@ -9,10 +9,12 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 final class ProductsRepository {
 
     private var firestore: Firestore { Firestore.firestore() }
+    private var storage: Storage { Storage.storage() }
 
     /// Colección de productos: data/stock/products
     private var productsCollection: CollectionReference {
@@ -64,5 +66,80 @@ final class ProductsRepository {
         } catch {
             return .failure(ErrorMapper.map(error))
         }
+    }
+
+    // MARK: - Admin: crear / editar / eliminar (espejo de ProductsRepositoryImpl)
+
+    struct ProductForm {
+        var id: String = ""
+        var title: String
+        var characteristics: String
+        var description: String
+        var price: Double
+        var actualPrice: Double
+        var category: String
+        var bestSelling: Bool
+        var newImages: [Data] = []        // imágenes nuevas a subir
+        var remoteImages: [String] = []   // URLs ya existentes (edición)
+    }
+
+    func createProduct(_ form: ProductForm) async -> Resource<Void> {
+        do {
+            let id = UUID().uuidString
+            let urls = try await uploadImages(productId: id, images: form.newImages, startIndex: 0)
+            try await productsCollection.document(id).setData(dto(form, id: id, images: urls))
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    func updateProduct(_ form: ProductForm) async -> Resource<Void> {
+        do {
+            let newUrls = try await uploadImages(productId: form.id, images: form.newImages,
+                                                 startIndex: form.remoteImages.count)
+            let finalImages = form.remoteImages + newUrls
+            try await productsCollection.document(form.id).setData(dto(form, id: form.id, images: finalImages))
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    func deleteProduct(id: String, imageUrls: [String]) async -> Resource<Void> {
+        do {
+            for url in imageUrls where !url.isEmpty {
+                try? await storage.reference(forURL: url).delete()
+            }
+            try await productsCollection.document(id).delete()
+            return .success(())
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    private func dto(_ form: ProductForm, id: String, images: [String]) -> [String: Any] {
+        [
+            "id": id,
+            "actual_price": form.actualPrice,
+            "best_selling": form.bestSelling,
+            "category": form.category,
+            "description": form.description,
+            "price": form.price,
+            "title": form.title,
+            "characteristics": form.characteristics,
+            "images": images
+        ]
+    }
+
+    /// Sube imágenes a products/{id}/image_N.jpg y devuelve sus URLs.
+    private func uploadImages(productId: String, images: [Data], startIndex: Int) async throws -> [String] {
+        var urls: [String] = []
+        for (i, data) in images.enumerated() {
+            let ref = storage.reference().child("products/\(productId)/image_\(startIndex + i).jpg")
+            _ = try await ref.putDataAsync(data)
+            urls.append(try await ref.downloadURL().absoluteString)
+        }
+        return urls
     }
 }

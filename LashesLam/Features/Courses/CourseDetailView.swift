@@ -13,6 +13,12 @@ struct CourseDetailView: View {
     let courseId: String
     @StateObject private var viewModel: CourseDetailViewModel
     @EnvironmentObject var session: SessionManager
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var showEditForm = false
+    @State private var showDeleteConfirm = false
+    @State private var isDeleting = false
+    private let coursesRepository = CoursesRepository()
 
     init(courseId: String) {
         self.courseId = courseId
@@ -76,9 +82,25 @@ struct CourseDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                FavoriteHeartButton(itemId: courseId, type: .course, bare: true)
+                if session.isUserAdmin {
+                    Menu {
+                        Button { showEditForm = true } label: { Label("Editar", systemImage: "pencil") }
+                        Button(role: .destructive) { showDeleteConfirm = true } label: { Label("Eliminar", systemImage: "trash") }
+                    } label: { Image(systemName: "ellipsis.circle") }
+                    .disabled(viewModel.course == nil)
+                } else {
+                    FavoriteHeartButton(itemId: courseId, type: .course, bare: true)
+                }
             }
         }
+        .sheet(isPresented: $showEditForm) {
+            if let course = viewModel.course { CourseFormView(course: course) }
+        }
+        .confirmationDialog("¿Eliminar este curso?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            Button("Eliminar", role: .destructive) { deleteCourse() }
+            Button("Cancelar", role: .cancel) {}
+        }
+        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
         .onAppear { viewModel.load() }
         .alert("Error", isPresented: Binding(
             get: { viewModel.errorMessage != nil },
@@ -223,6 +245,19 @@ struct CourseDetailView: View {
     }
 
     // MARK: - Helpers
+
+    private func deleteCourse() {
+        guard let course = viewModel.course else { return }
+        Task {
+            isDeleting = true
+            let result = await coursesRepository.deleteCourse(id: course.id, imageUrl: course.imagen)
+            isDeleting = false
+            if case .success = result {
+                NotificationCenter.default.post(name: .catalogDidChange, object: nil)
+                dismiss()
+            }
+        }
+    }
 
     private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) {

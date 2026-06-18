@@ -22,6 +22,7 @@ struct ProfilePageView: View {
     @State private var showLogoutConfirm = false
     @State private var showRequests = false
     @State private var showFavorites = false
+    @State private var showAvailability = false
 
     var body: some View {
         NavigationStack {
@@ -47,6 +48,9 @@ struct ProfilePageView: View {
         }
         .navigationDestination(isPresented: $showFavorites) {
             FavoritesView()
+        }
+        .navigationDestination(isPresented: $showAvailability) {
+            AvailabilityEditorView()
         }
         .onAppear { viewModel.loadUserData() }
         .sheet(isPresented: $showEditAddress) {
@@ -176,6 +180,11 @@ struct ProfilePageView: View {
             ProfileOptionButton(systemIcon: "bag.fill",
                                 text: session.isUserAdmin ? "Solicitudes" : "Pedidos y solicitudes") {
                 showRequests = true
+            }
+            if session.isUserAdmin {
+                ProfileOptionButton(systemIcon: "clock.badge.checkmark", text: "Disponibilidad de citas") {
+                    showAvailability = true
+                }
             }
 
             Button(role: .destructive) {

@@ -11,6 +11,12 @@ import SwiftUI
 struct ServiceDetailView: View {
     let service: ServiceItem
     @EnvironmentObject var session: SessionManager
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var showEditForm = false
+    @State private var showDeleteConfirm = false
+    @State private var isDeleting = false
+    private let servicesRepository = ServicesRepository()
 
     var body: some View {
         ScrollView {
@@ -91,7 +97,32 @@ struct ServiceDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                FavoriteHeartButton(itemId: service.id, type: .service, bare: true)
+                if session.isUserAdmin {
+                    Menu {
+                        Button { showEditForm = true } label: { Label("Editar", systemImage: "pencil") }
+                        Button(role: .destructive) { showDeleteConfirm = true } label: { Label("Eliminar", systemImage: "trash") }
+                    } label: { Image(systemName: "ellipsis.circle") }
+                } else {
+                    FavoriteHeartButton(itemId: service.id, type: .service, bare: true)
+                }
+            }
+        }
+        .sheet(isPresented: $showEditForm) { ServiceFormView(service: service) }
+        .confirmationDialog("¿Eliminar este servicio?", isPresented: $showDeleteConfirm, titleVisibility: .visible) {
+            Button("Eliminar", role: .destructive) { deleteService() }
+            Button("Cancelar", role: .cancel) {}
+        }
+        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
+    }
+
+    private func deleteService() {
+        Task {
+            isDeleting = true
+            let result = await servicesRepository.deleteService(id: service.id, imageUrl: service.image)
+            isDeleting = false
+            if case .success = result {
+                NotificationCenter.default.post(name: .catalogDidChange, object: nil)
+                dismiss()
             }
         }
     }
