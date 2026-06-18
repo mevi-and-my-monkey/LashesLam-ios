@@ -130,4 +130,49 @@ final class UserRepository {
             return .failure(ErrorMapper.map(error))
         }
     }
+
+    // MARK: - Lectura / edición de datos del usuario
+
+    /// Lee el documento users/{uid}. Espejo de ProfileViewModel.loadUserData (Android).
+    func fetchUser() async -> UserModel? {
+        guard let userId = auth.currentUser?.uid else { return nil }
+        guard let snapshot = try? await firestore
+            .document(FirestorePaths.Users.document(userId)).getDocument(),
+            let data = snapshot.data() else { return nil }
+
+        return UserModel(
+            name: data["name"] as? String,
+            email: data["email"] as? String,
+            uid: data["uid"] as? String ?? userId,
+            phone: data["phone"] as? String,
+            address: data["address"] as? String,
+            userPhoto: data["userPhoto"] as? String,
+            photoUpdatedByUser: (data["photoUpdatedByUser"] as? Bool) ?? false
+        )
+    }
+
+    func updateAddress(_ address: String) async -> Resource<Bool> {
+        guard let userId = auth.currentUser?.uid else { return .failure(.unknown(nil)) }
+        guard !address.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return .failure(.unknown("La dirección no puede estar vacía"))
+        }
+        do {
+            try await firestore.document(FirestorePaths.Users.document(userId))
+                .updateData(["address": address])
+            return .success(true)
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
+    func updatePhone(_ phone: String) async -> Resource<Bool> {
+        guard let userId = auth.currentUser?.uid else { return .failure(.unknown(nil)) }
+        do {
+            try await firestore.document(FirestorePaths.Users.document(userId))
+                .updateData(["phone": phone])
+            return .success(true)
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
 }
