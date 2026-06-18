@@ -36,7 +36,10 @@ struct AppRootView: View {
         .environmentObject(session)
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .onChange(of: loginViewModel.navigateToHome) { goHome in
-            if goHome { withAnimation { route = .main } }
+            if goHome {
+                FavoritesManager.shared.load()
+                withAnimation { route = .main }
+            }
         }
     }
 
@@ -49,7 +52,10 @@ struct AppRootView: View {
         if Auth.auth().currentUser != nil {
             Task {
                 await sessionRepository.refreshSession()
-                await MainActor.run { withAnimation { route = .main } }
+                await MainActor.run {
+                    FavoritesManager.shared.load()
+                    withAnimation { route = .main }
+                }
             }
         } else {
             withAnimation { route = .login }
@@ -57,6 +63,7 @@ struct AppRootView: View {
     }
 
     private func handleLogout() {
+        FavoritesManager.shared.clear()
         loginViewModel.navigateToHome = false
         withAnimation { route = .login }
     }

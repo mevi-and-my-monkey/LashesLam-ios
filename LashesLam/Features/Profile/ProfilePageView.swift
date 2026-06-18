@@ -20,9 +20,11 @@ struct ProfilePageView: View {
     @State private var showEditAddress = false
     @State private var showEditPhone = false
     @State private var showLogoutConfirm = false
-    @State private var showComingSoon = false
+    @State private var showRequests = false
+    @State private var showFavorites = false
 
     var body: some View {
+        NavigationStack {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
@@ -39,6 +41,12 @@ struct ProfilePageView: View {
                     ProgressView().tint(AppColors.pinkPrimary)
                 }
             }
+        }
+        .navigationDestination(isPresented: $showRequests) {
+            RequestsView(isAdmin: session.isUserAdmin)
+        }
+        .navigationDestination(isPresented: $showFavorites) {
+            FavoritesView()
         }
         .onAppear { viewModel.loadUserData() }
         .sheet(isPresented: $showEditAddress) {
@@ -67,9 +75,6 @@ struct ProfilePageView: View {
         ) {
             Button("OK", role: .cancel) { viewModel.errorMessage = nil }
         } message: { Text(viewModel.errorMessage ?? "") }
-        .alert("Próximamente", isPresented: $showComingSoon) {
-            Button("OK", role: .cancel) {}
-        } message: { Text("Esta sección estará disponible pronto.") }
         .confirmationDialog("¿Estás segura que quieres cerrar sesión?",
                             isPresented: $showLogoutConfirm, titleVisibility: .visible) {
             Button("Cerrar sesión", role: .destructive) {
@@ -77,6 +82,7 @@ struct ProfilePageView: View {
                 onLogout()
             }
             Button("Cancelar", role: .cancel) {}
+        }
         }
     }
 
@@ -162,16 +168,14 @@ struct ProfilePageView: View {
             ProfileOptionButton(systemIcon: "phone.fill", text: "Editar teléfono") {
                 showEditPhone = true
             }
-            ProfileOptionButton(systemIcon: "heart.fill", text: "Favoritos") {
-                showComingSoon = true
-            }
-            ProfileOptionButton(systemIcon: "bag.fill", text: "Pedidos") {
-                showComingSoon = true
-            }
-            if session.isUserAdmin {
-                ProfileOptionButton(systemIcon: "graduationcap.fill", text: "Inscripciones") {
-                    showComingSoon = true
+            if !session.isUserAdmin {
+                ProfileOptionButton(systemIcon: "heart.fill", text: "Favoritos") {
+                    showFavorites = true
                 }
+            }
+            ProfileOptionButton(systemIcon: "bag.fill",
+                                text: session.isUserAdmin ? "Solicitudes" : "Pedidos y solicitudes") {
+                showRequests = true
             }
 
             Button(role: .destructive) {
