@@ -107,6 +107,49 @@ final class UserRepository {
         }
     }
 
+    // MARK: - Sign in with Apple
+
+    /// Inicia sesión en Firebase con la credencial de Apple. Crea/mergea users/{uid}
+    /// igual que el flujo de Google. fullName solo llega en el primer inicio.
+    func signInWithApple(idToken: String, rawNonce: String, fullName: String?) async -> Resource<Bool> {
+        do {
+            let credential = OAuthProvider.appleCredential(
+                withIDToken: idToken,
+                rawNonce: rawNonce,
+                fullName: nil
+            )
+            let authResult = try await auth.signIn(with: credential)
+            let firebaseUser = authResult.user
+            let userId = firebaseUser.uid
+
+            let userDoc = firestore.document(FirestorePaths.Users.document(userId))
+            let snapshot = try await userDoc.getDocument()
+
+            if !snapshot.exists {
+                let dto = UserDto(
+                    name: fullName ?? firebaseUser.displayName,
+                    email: firebaseUser.email,
+                    uid: userId,
+                    phone: firebaseUser.phoneNumber,
+                    address: "",
+                    userPhoto: firebaseUser.photoURL?.absoluteString,
+                    photoUpdatedByUser: false
+                )
+                try await userDoc.setData(dto.toFirestoreData(), merge: true)
+            } else {
+                var identity: [String: Any] = [:]
+                let name = fullName ?? firebaseUser.displayName
+                if let name, !name.isEmpty { identity[FirestorePaths.Users.userName] = name }
+                if let email = firebaseUser.email { identity["email"] = email }
+                identity["uid"] = userId
+                try await userDoc.setData(identity, merge: true)
+            }
+            return .success(true)
+        } catch {
+            return .failure(ErrorMapper.map(error))
+        }
+    }
+
     // MARK: - Foto de perfil
 
     func updateProfilePhoto(data imageData: Data) async -> Resource<String> {

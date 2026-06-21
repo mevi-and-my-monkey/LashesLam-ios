@@ -23,11 +23,13 @@
 		21D2BB6EE61BEC38EEAF589F /* CourseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD2076C65A44C30AF37B6AD /* CourseRequest.swift */; };
 		24B3D67D3310156C8FF160CB /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 031C7709DE30C9C9AB8D5153 /* FirebaseAnalytics */; };
 		2A3458854623375BEE466314 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936089CC636F0E6D5ECAABBE /* CategoryModel.swift */; };
+		2B6372018839D817D87E8A06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8B203E7991FB44DCF81A0EE0 /* PrivacyInfo.xcprivacy */; };
 		2F253B44C69BFE3C03C9C145 /* CourseDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB2CA2BE37FF75FC561497E /* CourseDetailViewModel.swift */; };
 		326635E581AF00FB63A03F90 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF82CE3D8C8B58730B9200E /* ProfilePageView.swift */; };
 		383B8D17EE06814785BCD054 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9079BF9CEB432CED72FC0C /* Typography.swift */; };
 		3B6A01339D7CA6892E7B79AC /* ReservationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B1F4A466E9E85C14CFFDB /* ReservationsView.swift */; };
 		3C16E94B94DFB88750D712C7 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BBA4369C3939F5C9A86E29 /* ServicesViewModel.swift */; };
+		3ED50C7CA5BFE156DCC894D7 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E08C1661DE065CA52F78DB4 /* AppConfig.swift */; };
 		43516B56B2D2518FB64D7E78 /* CartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A021D325CB651AB9FED1DA /* CartItem.swift */; };
 		443EDA4B62A83A3B010BB7B4 /* ErrorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A087D05E003E92D09BA1 /* ErrorMapper.swift */; };
 		4A0AC0529C18DAC28EAEC32D /* ReservationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65329D40F5C41B5A58E34C52 /* ReservationsViewModel.swift */; };
@@ -51,6 +53,7 @@
 		66ACD2323C12EF9EAB217571 /* CoursesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248A990159D4957C0AC677F0 /* CoursesViewModel.swift */; };
 		6800206D84EC5011E6AF0852 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2911932EF36ECA1499AE6264 /* FirebaseFirestore */; };
 		6A349370516678F70D1CDAA1 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7D667F3105D98ABED3ED40C1 /* FirebaseCrashlytics */; };
+		6AF1640B7076A2CC966AD804 /* AppleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4068648B145A5F5BA06C3AA /* AppleSignInHelper.swift */; };
 		6BD6025A47911388040B3BEF /* LashesLamConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1EA1AB1685065AA75BD63C /* LashesLamConfig.swift */; };
 		6C7B9F7110A2438789ED3043 /* QuantityStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C63C0E715F2432F18D5B11B /* QuantityStepper.swift */; };
 		6CC44E5D26357606175EA46A /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659B32965D2435E9B1B35ACE /* SplashScreen.swift */; };
@@ -143,6 +146,7 @@
 		460C02B45870F5C332D84B94 /* LocationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItem.swift; sourceTree = "<group>"; };
 		47FB9F0462D02E7EF2415B8B /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		49112FC70E7BCB4EED41A8AD /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
+		4AB77AA8636A2FCB72120440 /* LashesLam.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LashesLam.entitlements; sourceTree = "<group>"; };
 		4E289F8D989DC28FE117F513 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		4F6079488ED459A3ABFD7AF2 /* ServiceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCard.swift; sourceTree = "<group>"; };
 		4F7E1CC776C197327FA5E825 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 		55BBC604947DD779E1A4EFCB /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		56E4957AC866AE097B9E6E5D /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
 		576308E9606B344325709ED8 /* LashesLamApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LashesLamApp.swift; sourceTree = "<group>"; };
+		5E08C1661DE065CA52F78DB4 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		601586EE4BE846D98F38CBEE /* ServiceFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFormView.swift; sourceTree = "<group>"; };
 		61AD0D97A38EBB9A2D669607 /* FavoriteHeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteHeartButton.swift; sourceTree = "<group>"; };
 		65329D40F5C41B5A58E34C52 /* ReservationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsViewModel.swift; sourceTree = "<group>"; };
@@ -172,9 +177,10 @@
 		7CD2076C65A44C30AF37B6AD /* CourseRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseRequest.swift; sourceTree = "<group>"; };
 		7D82E013B6E61AC359E46F2D /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		7DDD9174AC6A95A2DFF631A6 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
-		85E949FC7A0C0E79828D6DE9 /* LashesLam.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LashesLam.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		85E949FC7A0C0E79828D6DE9 /* LashesLam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LashesLam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88993173473C121331412A1A /* CatalogNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNotifications.swift; sourceTree = "<group>"; };
 		8A277D5546A1E415D82AE60C /* UserCoursesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCoursesView.swift; sourceTree = "<group>"; };
+		8B203E7991FB44DCF81A0EE0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8FE86547EEAC45F3241813F1 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		936089CC636F0E6D5ECAABBE /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		964F33DBF94AF986DC6F9C00 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -201,6 +207,7 @@
 		D76BC92DC08B06390F2F9BF4 /* ReservationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationCard.swift; sourceTree = "<group>"; };
 		DD415214720AB257E6252373 /* RequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsView.swift; sourceTree = "<group>"; };
 		E399C5BA4E052AE18B026BED /* CatalogHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogHomeView.swift; sourceTree = "<group>"; };
+		E4068648B145A5F5BA06C3AA /* AppleSignInHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInHelper.swift; sourceTree = "<group>"; };
 		E463DF06F6D2C2B73FEB5DA6 /* ServiceReservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceReservation.swift; sourceTree = "<group>"; };
 		E8006F6866D9226A5F77BC5F /* ProductFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductFormViewModel.swift; sourceTree = "<group>"; };
 		E862BE2E582A4EA47657B637 /* RegisterSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSheetView.swift; sourceTree = "<group>"; };
@@ -519,6 +526,8 @@
 				7380EAC7B7EA54441C77B59F /* Assets.xcassets */,
 				CF8514C334056492958B50AC /* GoogleService-Info.plist */,
 				BA993270B6E20382B08293E0 /* Info.plist */,
+				4AB77AA8636A2FCB72120440 /* LashesLam.entitlements */,
+				8B203E7991FB44DCF81A0EE0 /* PrivacyInfo.xcprivacy */,
 				F7DDFE32854F5C9AB7C4CF2F /* App */,
 				AEC8567084D2062D6E3C0A93 /* Components */,
 				E76C0DED474CE0C94A50F20F /* Core */,
@@ -532,6 +541,8 @@
 		E76C0DED474CE0C94A50F20F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5E08C1661DE065CA52F78DB4 /* AppConfig.swift */,
+				E4068648B145A5F5BA06C3AA /* AppleSignInHelper.swift */,
 				F37708000B9599938A49E162 /* Array+Chunked.swift */,
 				88993173473C121331412A1A /* CatalogNotifications.swift */,
 				4E289F8D989DC28FE117F513 /* Formatters.swift */,
@@ -607,8 +618,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 42D0B4B85209AEF2B81122C3 /* Build configuration list for PBXProject "LashesLam" */;
 			developmentRegion = en;
@@ -640,6 +649,7 @@
 			files = (
 				1822EDA524A68BFFCA8817F7 /* Assets.xcassets in Resources */,
 				C0ED6E2D89D371CD2ECBDB13 /* GoogleService-Info.plist in Resources */,
+				2B6372018839D817D87E8A06 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,8 +661,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				835D41BABE5BB95E1F938E4E /* AppColors.swift in Sources */,
+				3ED50C7CA5BFE156DCC894D7 /* AppConfig.swift in Sources */,
 				C38E6B9942F7D925B65F7910 /* AppError.swift in Sources */,
 				633B42F1B206A8AB3ECCF9D1 /* AppRootView.swift in Sources */,
+				6AF1640B7076A2CC966AD804 /* AppleSignInHelper.swift in Sources */,
 				1B0DCACEADF0E2E0F0174A9D /* Array+Chunked.swift in Sources */,
 				EF9A6B653DFBE9083E67298F /* AvailabilityEditorView.swift in Sources */,
 				DEC0DCC3F9661EEA008D915A /* AvailabilityEditorViewModel.swift in Sources */,
@@ -756,6 +768,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8W7DB6MJB;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LashesLam/Info.plist;
@@ -898,6 +911,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N8W7DB6MJB;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LashesLam/Info.plist;

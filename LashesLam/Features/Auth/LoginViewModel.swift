@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 @MainActor
 final class LoginViewModel: ObservableObject {
@@ -17,6 +18,9 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var navigateToHome: Bool = false
+
+    /// Nonce en crudo para el flujo de Sign in with Apple.
+    private var appleRawNonce: String?
 
     private let userRepository: UserRepository
     private let sessionRepository: SessionRepository
@@ -86,6 +90,50 @@ final class LoginViewModel: ObservableObject {
                 self.navigateToHome = true
             case .failure(let error):
                 self.errorMessage = error.userMessage
+            }
+        }
+    }
+
+    // MARK: - Sign in with Apple
+
+    /// Configura la solicitud de Apple: genera el nonce y pide nombre/email.
+    func configureAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
+        let nonce = AppleSignInHelper.randomNonce()
+        appleRawNonce = nonce
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = AppleSignInHelper.sha256(nonce)
+    }
+
+    /// Procesa el resultado del botón de Apple.
+    func handleAppleCompletion(_ result: Result<ASAuthorization, Error>) {
+        switch result {
+        case .failure:
+            // El usuario canceló o hubo error de la hoja de Apple; no mostramos error intrusivo.
+            return
+        case .success(let authorization):
+            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                  let tokenData = credential.identityToken,
+                  let idToken = String(data: tokenData, encoding: .utf8),
+                  let rawNonce = appleRawNonce else {
+                errorMessage = "No se pudo completar el inicio con Apple"
+                return
+            }
+            let fullName = [credential.fullName?.givenName, credential.fullName?.familyName]
+                .compactMap { $0 }.joined(separator: " ")
+
+            runWithLoading {
+                let result = await self.userRepository.signInWithApple(
+                    idToken: idToken,
+                    rawNonce: rawNonce,
+                    fullName: fullName.isEmpty ? nil : fullName
+                )
+                switch result {
+                case .success:
+                    await self.sessionRepository.refreshSession()
+                    self.navigateToHome = true
+                case .failure(let error):
+                    self.errorMessage = error.userMessage
+                }
             }
         }
     }

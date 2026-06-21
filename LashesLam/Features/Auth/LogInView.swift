@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct LogInView: View {
     var config: LashesLamConfig = LashesLamConfig()
@@ -88,6 +89,18 @@ struct LogInView: View {
                         if let vc = UIApplication.shared.topViewController {
                             viewModel.signInWithGoogle(presenting: vc)
                         }
+                    }
+
+                    // Requiere Apple Developer Program de pago (ver AppConfig).
+                    if AppConfig.signInWithAppleEnabled {
+                        SignInWithAppleButton(.signIn) { request in
+                            viewModel.configureAppleRequest(request)
+                        } onCompletion: { result in
+                            viewModel.handleAppleCompletion(result)
+                        }
+                        .signInWithAppleButtonStyle(.black)
+                        .frame(height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
 
