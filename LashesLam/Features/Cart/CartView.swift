@@ -27,29 +27,25 @@ struct CartView: View {
                     if cart.items.isEmpty {
                         emptyState
                     } else {
-                        List {
-                            ForEach(cart.items) { item in
-                                cartRow(item)
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.clear)
+                        // LazyVStack en vez de List: dentro de un List los varios
+                        // botones de la fila (±/eliminar) se disparan juntos al tocar,
+                        // lo que borraba el ítem al aumentar la cantidad.
+                        ScrollView {
+                            LazyVStack(spacing: 12) {
+                                ForEach(cart.items) { item in
+                                    cartRow(item)
+                                }
                             }
+                            .padding(16)
                         }
-                        .listStyle(.plain)
                         summary
                     }
                 }
             }
 
-            if viewModel.isLoading {
-                ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(AppColors.pinkPrimary) }
-            }
+            GenericLoading(isLoading: viewModel.isLoading)
         }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .errorDialog($viewModel.errorMessage)
     }
 
     // MARK: - Header

@@ -33,7 +33,6 @@ struct LogInView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 120, height: 120)
-                    .clipShape(Circle())
                     .scaleEffect(showLogo ? 1 : 0.6)
                     .opacity(showLogo ? 1 : 0)
                     .animation(.easeOut(duration: 0.8), value: showLogo)
@@ -116,21 +115,8 @@ struct LogInView: View {
                     RegisterSheetView(config: config, viewModel: viewModel)
                 }
             }
-            .overlay {
-                if viewModel.isLoading {
-                    ZStack {
-                        Color.black.opacity(0.2).ignoresSafeArea()
-                        ProgressView().tint(AppColors.pinkPrimary)
-                    }
-                }
-            }
-            .alert("Error",
-                   isPresented: Binding(
-                    get: { viewModel.errorMessage != nil },
-                    set: { if !$0 { viewModel.errorMessage = nil } }
-                   ),
-                   actions: { Button("OK", role: .cancel) { viewModel.errorMessage = nil } },
-                   message: { Text(viewModel.errorMessage ?? "") })
+            .overlay { GenericLoading(isLoading: viewModel.isLoading) }
+            .errorDialog($viewModel.errorMessage)
         }
     }
 }

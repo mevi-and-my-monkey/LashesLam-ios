@@ -44,11 +44,11 @@ struct CourseDetailView: View {
                             }
                         }
 
-                        if !course.temarios.isEmpty {
+                        if !temarioItems(course).isEmpty {
                             section("Temario") {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    ForEach(course.temarios, id: \.self) { item in
-                                        Label(item, systemImage: "checkmark.circle.fill")
+                                    ForEach(Array(temarioItems(course).enumerated()), id: \.offset) { index, item in
+                                        Label("Día \(index + 1): \(item)", systemImage: "checkmark.circle.fill")
                                             .font(.subheadline).foregroundColor(AppColors.onSurfaceVariant)
                                     }
                                 }
@@ -74,7 +74,7 @@ struct CourseDetailView: View {
                 }
                 .padding(.bottom, 32)
             } else if viewModel.isLoading {
-                ProgressView().tint(AppColors.pinkPrimary).padding(.top, 80)
+                LottieView(name: "loading").frame(width: 100, height: 100).padding(.top, 80)
             }
         }
         .background(AppColors.surface.ignoresSafeArea())
@@ -100,14 +100,9 @@ struct CourseDetailView: View {
             Button("Eliminar", role: .destructive) { deleteCourse() }
             Button("Cancelar", role: .cancel) {}
         }
-        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
+        .overlay { GenericLoading(isLoading: isDeleting) }
         .onAppear { viewModel.load() }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .errorDialog($viewModel.errorMessage)
     }
 
     // MARK: - Imagen (4:3, fit, fondo surfaceVariant como Android)
@@ -257,6 +252,11 @@ struct CourseDetailView: View {
                 dismiss()
             }
         }
+    }
+
+    /// Temarios no vacíos (Android rellena la lista con blancos hasta 5).
+    private func temarioItems(_ course: CourseDetail) -> [String] {
+        course.temarios.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
     }
 
     private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {

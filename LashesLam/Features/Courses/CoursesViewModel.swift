@@ -14,6 +14,15 @@ final class CoursesViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
 
+    /// Solo cursos de fecha futura (>= hoy), ordenados por fecha. Igual que el
+    /// filtro del Home en Android (HomePageViewModel: date >= today, sortedBy date).
+    var futureCourses: [CourseItem] {
+        let today = Calendar.current.startOfDay(for: Date())
+        return courses
+            .filter { ($0.parsedDate ?? .distantPast) >= today }
+            .sorted { ($0.parsedDate ?? .distantPast) < ($1.parsedDate ?? .distantPast) }
+    }
+
     private let repository: CoursesRepository
 
     init(repository: CoursesRepository = CoursesRepository()) {

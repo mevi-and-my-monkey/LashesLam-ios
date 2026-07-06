@@ -27,16 +27,11 @@ struct CourseRequestsView: View {
                 }
             }
 
-            if viewModel.isLoading { ProgressView().tint(AppColors.pinkPrimary) }
+            if viewModel.isLoading { LottieView(name: "loading").frame(width: 100, height: 100) }
         }
         .onAppear { viewModel.load() }
         .refreshable { viewModel.load() }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .errorDialog($viewModel.errorMessage)
     }
 
     private func requestCard(_ request: CourseRequest) -> some View {

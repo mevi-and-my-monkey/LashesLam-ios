@@ -63,12 +63,7 @@ struct ServiceFormView: View {
             .onAppear { viewModel.loadCategories() }
             .onChange(of: pickerItem) { item in viewModel.setImage(item) }
             .onChange(of: viewModel.didSave) { if $0 { dismiss() } }
-            .alert("Error", isPresented: Binding(
-                get: { viewModel.errorMessage != nil },
-                set: { if !$0 { viewModel.errorMessage = nil } })
-            ) {
-                Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-            } message: { Text(viewModel.errorMessage ?? "") }
+            .errorDialog($viewModel.errorMessage)
         }
     }
 

@@ -43,8 +43,25 @@ struct SplashScreen: View {
                     .foregroundStyle(shimmerGradient)
                     .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             }
+
+            // Versión en la parte inferior (igual que Android: "Version: 1.1.0 (1)").
+            VStack {
+                Spacer()
+                Text("Version: \(Self.appVersion) (\(Self.buildNumber))")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(Color(red: 1.0, green: 0.76, blue: 0.89))
+                    .padding(.bottom, 20)
+            }
         }
         .onAppear { startAnimation() }
+    }
+
+    private static var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
+    }
+
+    private static var buildNumber: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
     }
 
     private var shimmerGradient: LinearGradient {

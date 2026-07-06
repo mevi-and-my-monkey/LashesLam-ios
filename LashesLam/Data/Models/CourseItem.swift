@@ -20,6 +20,14 @@ struct CourseItem: Identifiable, Hashable {
 
     var schedule: String { "\(horaInicio) - \(horaFin)" }
 
+    /// Fecha parseada desde el string dd/MM/yyyy (para filtrar/ordenar por fecha).
+    var parsedDate: Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.locale = Locale(identifier: "es_MX")
+        return formatter.date(from: fecha)
+    }
+
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
         self.id = document.documentID

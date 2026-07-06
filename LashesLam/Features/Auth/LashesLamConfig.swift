@@ -18,7 +18,7 @@ struct LashesLamConfig {
     var outlinedBorderColor: Color = AppColors.outline
 
     // Imágenes
-    var logoImage: Image = Image("logo_app")
+    var logoImage: Image = Image("logo_lashes")
     var googleIcon: Image? = Image("ic_google_one")
 
     // Textos

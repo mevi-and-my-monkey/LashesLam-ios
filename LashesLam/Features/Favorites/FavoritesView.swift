@@ -2,7 +2,8 @@
 //  FavoritesView.swift
 //  LashesLam
 //
-//  Favoritos del usuario con selector Productos / Cursos / Servicios.
+//  Favoritos del usuario. Solo muestra Cursos y Productos (en ese orden), con las
+//  tarjetas de favoritos dedicadas (FavoriteCourseCard / FavoriteProductCard).
 //
 
 import SwiftUI
@@ -12,14 +13,11 @@ struct FavoritesView: View {
     @ObservedObject private var favorites = FavoritesManager.shared
 
     enum Section: String, CaseIterable, Identifiable {
-        case productos = "Productos"
         case cursos = "Cursos"
-        case servicios = "Servicios"
+        case productos = "Productos"
         var id: String { rawValue }
     }
-    @State private var section: Section = .productos
-
-    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+    @State private var section: Section = .cursos
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,9 +29,8 @@ struct FavoritesView: View {
 
             ScrollView {
                 switch section {
-                case .productos: productsGrid
                 case .cursos: coursesList
-                case .servicios: servicesList
+                case .productos: productsList
                 }
             }
         }
@@ -41,48 +38,39 @@ struct FavoritesView: View {
         .navigationTitle("Favoritos")
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
-            if viewModel.isLoading { ProgressView().tint(AppColors.pinkPrimary) }
-            else if viewModel.isEmpty { emptyState }
+            if viewModel.isLoading { LottieView(name: "loading").frame(width: 100, height: 100) }
+            else if isCurrentSectionEmpty { emptyState }
         }
         .onAppear { viewModel.load() }
-        // Recarga al cambiar favoritos desde otras pantallas.
         .onChange(of: favorites.favoriteIds) { _ in viewModel.load() }
     }
 
-    private var productsGrid: some View {
-        LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(viewModel.products) { product in
-                ZStack(alignment: .topTrailing) {
-                    NavigationLink { ProductDetailView(product: product) } label: { ProductCard(product: product) }
-                        .buttonStyle(.plain)
-                    FavoriteHeartButton(itemId: product.id, type: .product).padding(18)
-                }
-            }
+    private var isCurrentSectionEmpty: Bool {
+        switch section {
+        case .cursos: return viewModel.courses.isEmpty
+        case .productos: return viewModel.products.isEmpty
         }
-        .padding(16)
     }
 
     private var coursesList: some View {
-        LazyVStack(spacing: 16) {
+        LazyVStack(spacing: 12) {
             ForEach(viewModel.courses) { course in
-                ZStack(alignment: .topTrailing) {
-                    NavigationLink { CourseDetailView(courseId: course.id) } label: { CourseCard(course: course) }
-                        .buttonStyle(.plain)
-                    FavoriteHeartButton(itemId: course.id, type: .course).padding(14)
+                NavigationLink { CourseDetailView(courseId: course.id) } label: {
+                    FavoriteCourseCard(course: course)
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding(16)
     }
 
-    private var servicesList: some View {
+    private var productsList: some View {
         LazyVStack(spacing: 12) {
-            ForEach(viewModel.services) { service in
-                ZStack(alignment: .topTrailing) {
-                    NavigationLink { ServiceDetailView(service: service) } label: { ServiceCard(service: service) }
-                        .buttonStyle(.plain)
-                    FavoriteHeartButton(itemId: service.id, type: .service).padding(10)
+            ForEach(viewModel.products) { product in
+                NavigationLink { ProductDetailView(product: product) } label: {
+                    FavoriteProductCard(product: product)
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding(16)

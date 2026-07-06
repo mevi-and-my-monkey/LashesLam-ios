@@ -21,11 +21,18 @@ struct ServiceDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                AsyncImage(url: URL(string: service.image)) { phase in
-                    if let image = phase.image { image.resizable().scaledToFill() }
-                    else { ZStack { AppColors.surfaceVariant; ProgressView() } }
-                }
-                .frame(height: 260).frame(maxWidth: .infinity).clipped()
+                // Contenedor de altura fija que recorta la imagen: evita que
+                // scaledToFill desborde y "expanda" la vista ocultando elementos.
+                Color.clear
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 260)
+                    .overlay {
+                        AsyncImage(url: URL(string: service.image)) { phase in
+                            if let image = phase.image { image.resizable().scaledToFill() }
+                            else { ZStack { AppColors.surfaceVariant; LottieView(name: "loading").frame(width: 60, height: 60) } }
+                        }
+                    }
+                    .clipped()
 
                 VStack(alignment: .leading, spacing: 12) {
                     Text(service.title).font(.appTitle(26)).foregroundColor(AppColors.onSurface)
@@ -55,36 +62,39 @@ struct ServiceDetailView: View {
                         Text(service.description).font(.body).foregroundColor(AppColors.onSurfaceVariant)
                     }
 
-                    NavigationLink {
-                        BookingView(service: service)
-                    } label: {
-                        HStack {
-                            Image(systemName: "calendar.badge.plus")
-                            Text("Agendar cita").fontWeight(.bold)
-                        }
-                        .frame(maxWidth: .infinity).padding()
-                        .background(AppColors.pinkPrimary).foregroundColor(.white)
-                        .clipShape(Capsule())
-                    }
-                    .padding(.top, 8)
-
-                    if let whatsapp = session.whatsApp, !whatsapp.isEmpty {
-                        Button {
-                            let url = Formatters.whatsAppProductURL(
-                                title: service.title,
-                                price: Formatters.money(service.price),
-                                whatsapp: whatsapp
-                            )
-                            if let url { UIApplication.shared.open(url) }
+                    // El agendado/contacto solo para usuarios (no admin), igual que Android.
+                    if !session.isUserAdmin {
+                        NavigationLink {
+                            BookingView(service: service)
                         } label: {
                             HStack {
-                                Image(systemName: "message.fill")
-                                Text("Más información por WhatsApp").fontWeight(.semibold)
+                                Image(systemName: "calendar.badge.plus")
+                                Text("Agendar cita").fontWeight(.bold)
                             }
                             .frame(maxWidth: .infinity).padding()
-                            .background(Color(red: 0.145, green: 0.827, blue: 0.4).opacity(0.15))
-                            .foregroundColor(Color(red: 0.10, green: 0.55, blue: 0.30))
+                            .background(AppColors.pinkPrimary).foregroundColor(.white)
                             .clipShape(Capsule())
+                        }
+                        .padding(.top, 8)
+
+                        if let whatsapp = session.whatsApp, !whatsapp.isEmpty {
+                            Button {
+                                let url = Formatters.whatsAppProductURL(
+                                    title: service.title,
+                                    price: Formatters.money(service.price),
+                                    whatsapp: whatsapp
+                                )
+                                if let url { UIApplication.shared.open(url) }
+                            } label: {
+                                HStack {
+                                    Image(systemName: "message.fill")
+                                    Text("Más información por WhatsApp").fontWeight(.semibold)
+                                }
+                                .frame(maxWidth: .infinity).padding()
+                                .background(Color(red: 0.145, green: 0.827, blue: 0.4).opacity(0.15))
+                                .foregroundColor(Color(red: 0.10, green: 0.55, blue: 0.30))
+                                .clipShape(Capsule())
+                            }
                         }
                     }
                 }
@@ -112,7 +122,7 @@ struct ServiceDetailView: View {
             Button("Eliminar", role: .destructive) { deleteService() }
             Button("Cancelar", role: .cancel) {}
         }
-        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
+        .overlay { GenericLoading(isLoading: isDeleting) }
     }
 
     private func deleteService() {

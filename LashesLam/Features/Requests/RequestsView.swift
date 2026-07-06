@@ -12,13 +12,13 @@ struct RequestsView: View {
     let isAdmin: Bool
 
     enum Section: String, CaseIterable, Identifiable {
-        case productos = "Productos"
         case cursos = "Cursos"
+        case productos = "Productos"
         case servicios = "Servicios"
         var id: String { rawValue }
     }
 
-    @State private var section: Section = .productos
+    @State private var section: Section = .cursos
 
     var body: some View {
         VStack(spacing: 0) {

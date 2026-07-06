@@ -41,7 +41,7 @@ struct UserCoursesView: View {
                     .padding(16)
                 }
             }
-            if viewModel.isLoading { ProgressView().tint(AppColors.pinkPrimary) }
+            if viewModel.isLoading { LottieView(name: "loading").frame(width: 100, height: 100) }
         }
         .onAppear { viewModel.load() }
         .refreshable { viewModel.load() }
@@ -51,27 +51,72 @@ struct UserCoursesView: View {
         let style = courseStatusStyle(item.status)
         return HStack(spacing: 0) {
             Rectangle().fill(style.color).frame(width: 5)
-            VStack(alignment: .leading, spacing: 6) {
-                Text(item.courseName).font(.appTitleMedium(18)).fontWeight(.bold)
-                    .foregroundColor(AppColors.onSurface)
-                HStack(spacing: 12) {
-                    Label(item.date, systemImage: "calendar")
-                    if !item.schedule.isEmpty { Label(item.schedule, systemImage: "clock") }
+            VStack(alignment: .leading, spacing: 8) {
+                // Título + costo/apartado
+                HStack(alignment: .top) {
+                    Text(item.courseName.uppercased())
+                        .font(.appTitleMedium(18)).fontWeight(.bold)
+                        .foregroundColor(AppColors.pinkPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(priceText(item.price))
+                            .font(.appTitleMedium(22)).fontWeight(.bold)
+                            .foregroundColor(AppColors.onSurface)
+                        if !item.apartar.isEmpty {
+                            Text("Apartar \(item.apartar)")
+                                .font(.caption2).foregroundColor(.gray)
+                        }
+                    }
                 }
-                .font(.caption).foregroundColor(.gray)
+
+                // Fecha + horario
                 HStack(spacing: 8) {
-                    Circle().fill(style.color).frame(width: 6, height: 6)
-                    Text(style.label).font(.caption.bold()).foregroundColor(style.color)
+                    Image(systemName: "calendar").font(.system(size: 13)).foregroundColor(.gray)
+                    Text(item.schedule.isEmpty ? item.date : "\(item.date) · \(item.schedule)")
+                        .font(.caption).foregroundColor(.darkGrayCompat)
                 }
-                .padding(.horizontal, 12).padding(.vertical, 6)
-                .background(style.background).clipShape(Capsule())
+
+                // Ubicación
+                if !item.location.isEmpty {
+                    HStack(spacing: 8) {
+                        Image(systemName: "mappin.and.ellipse").font(.system(size: 13)).foregroundColor(.gray)
+                        Text(item.location).font(.caption).foregroundColor(.gray)
+                    }
+                }
+
+                Divider().padding(.vertical, 4)
+
+                // Estado + ver detalle
+                HStack {
+                    HStack(spacing: 8) {
+                        Circle().fill(style.color).frame(width: 6, height: 6)
+                        Text(style.label).font(.caption.bold()).foregroundColor(style.color)
+                    }
+                    .padding(.horizontal, 12).padding(.vertical, 6)
+                    .background(style.background).clipShape(Capsule())
+
+                    Spacer()
+
+                    NavigationLink { CourseDetailView(courseId: item.courseId) } label: {
+                        HStack(spacing: 2) {
+                            Text("Ver detalle").font(.caption.bold())
+                            Image(systemName: "chevron.right").font(.system(size: 12))
+                        }
+                        .foregroundColor(AppColors.pinkPrimary)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding(16)
-            Spacer()
         }
         .background(AppColors.surface)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.05), radius: 3, y: 1)
+    }
+
+    private func priceText(_ price: String) -> String {
+        if let value = Double(price) { return Formatters.money(value) }
+        return price
     }
 
     private func courseStatusStyle(_ status: String) -> (color: Color, background: Color, label: String) {

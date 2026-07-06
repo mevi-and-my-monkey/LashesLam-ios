@@ -36,12 +36,7 @@ struct ProfilePageView: View {
                 }
             }
 
-            if viewModel.isLoading {
-                ZStack {
-                    Color.black.opacity(0.2).ignoresSafeArea()
-                    ProgressView().tint(AppColors.pinkPrimary)
-                }
-            }
+            GenericLoading(isLoading: viewModel.isLoading)
         }
         .navigationDestination(isPresented: $showRequests) {
             RequestsView(isAdmin: session.isUserAdmin)
@@ -67,18 +62,8 @@ struct ProfilePageView: View {
                 }
             }
         }
-        .alert("Listo", isPresented: Binding(
-            get: { viewModel.successMessage != nil },
-            set: { if !$0 { viewModel.successMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.successMessage = nil }
-        } message: { Text(viewModel.successMessage ?? "") }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .successDialog($viewModel.successMessage)
+        .errorDialog($viewModel.errorMessage)
         .confirmationDialog("¿Estás segura que quieres cerrar sesión?",
                             isPresented: $showLogoutConfirm, titleVisibility: .visible) {
             Button("Cerrar sesión", role: .destructive) {

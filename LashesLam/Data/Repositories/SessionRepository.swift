@@ -43,6 +43,12 @@ final class SessionRepository {
     @MainActor
     func refreshAdmins() async {
         let remoteConfig = RemoteConfig.remoteConfig()
+        // Sin caché: siempre trae el valor más reciente, igual que Android
+        // (minimumFetchIntervalInSeconds = 0). Si no, iOS sirve valores viejos ~12h
+        // (por eso el envío mostraba 60 en vez del 0 configurado en Remote Config).
+        let settings = RemoteConfigSettings()
+        settings.minimumFetchInterval = 0
+        remoteConfig.configSettings = settings
         do {
             _ = try await remoteConfig.fetchAndActivate()
         } catch {

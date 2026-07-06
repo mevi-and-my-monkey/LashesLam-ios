@@ -47,17 +47,7 @@ struct ProductDetailView: View {
                             .foregroundColor(AppColors.onSurfaceVariant)
                     }
 
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
-                        Text(Formatters.money(product.actualPrice))
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(AppColors.pinkPrimary)
-                        if product.price != 0.0 {
-                            Text(Formatters.money(product.price))
-                                .font(.system(size: 16))
-                                .strikethrough()
-                                .foregroundColor(.gray)
-                        }
-                    }
+                    priceRow
 
                     // Agregar al carrito (oculto para administradores).
                     if !session.isUserAdmin {
@@ -77,7 +67,11 @@ struct ProductDetailView: View {
 
                     Text("¿Te interesa? Solicita más información")
                         .font(.subheadline.bold())
-                    contactButtons
+                    SocialMediaRow(
+                        whatsAppURL: whatsAppURL,
+                        instagram: session.instagram,
+                        facebook: session.facebook
+                    )
                 }
                 .padding(.horizontal, 16)
             }
@@ -103,7 +97,7 @@ struct ProductDetailView: View {
             Button("Eliminar", role: .destructive) { deleteProduct() }
             Button("Cancelar", role: .cancel) {}
         }
-        .overlay { if isDeleting { ZStack { Color.black.opacity(0.2).ignoresSafeArea(); ProgressView().tint(.white) } } }
+        .overlay { GenericLoading(isLoading: isDeleting) }
     }
 
     private func deleteProduct() {
@@ -169,44 +163,43 @@ struct ProductDetailView: View {
         .background(AppColors.surfaceVariant)
     }
 
-    private var contactButtons: some View {
-        HStack(spacing: 16) {
-            if let whatsapp = session.whatsApp, !whatsapp.isEmpty {
-                contactButton(icon: "message.fill", color: Color(red: 0.15, green: 0.83, blue: 0.45)) {
-                    let url = Formatters.whatsAppProductURL(
-                        title: product.title,
-                        price: Formatters.money(product.actualPrice),
-                        whatsapp: whatsapp
-                    )
-                    open(url)
-                }
-            }
-            if let instagram = session.instagram, !instagram.isEmpty {
-                contactButton(icon: "camera.fill", color: Color(red: 0.76, green: 0.23, blue: 0.55)) {
-                    open(URL(string: instagram))
-                }
-            }
-            if let facebook = session.facebook, !facebook.isEmpty {
-                contactButton(icon: "f.circle.fill", color: Color(red: 0.23, green: 0.35, blue: 0.6)) {
-                    open(URL(string: facebook))
-                }
+    // MARK: - Precio (igual que DetailCostProductView.kt: precio actual grande y,
+    // solo si hay descuento real, el precio original tachado + % de descuento).
+
+    private var priceRow: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Text(Formatters.money(product.actualPrice))
+                .font(.system(size: 26, weight: .bold))
+                .foregroundColor(AppColors.pinkPrimary)
+
+            if product.price > product.actualPrice {
+                Text(Formatters.money(product.price))
+                    .font(.system(size: 16))
+                    .strikethrough()
+                    .foregroundColor(.gray)
+
+                Text("-\(discountPercent)%")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(AppColors.pinkPrimary)
+                    .padding(.horizontal, 8).padding(.vertical, 2)
+                    .background(Color(red: 0.99, green: 0.95, blue: 0.94))
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(AppColors.pinkPrimary.opacity(0.3), lineWidth: 0.5))
             }
         }
     }
 
-    private func contactButton(icon: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .font(.system(size: 22))
-                .foregroundColor(.white)
-                .frame(width: 52, height: 52)
-                .background(color)
-                .clipShape(Circle())
-        }
+    private var discountPercent: Int {
+        guard product.price > product.actualPrice, product.price > 0 else { return 0 }
+        return Int(((product.price - product.actualPrice) / product.price) * 100)
     }
 
-    private func open(_ url: URL?) {
-        guard let url else { return }
-        UIApplication.shared.open(url)
+    private var whatsAppURL: URL? {
+        guard let whatsapp = session.whatsApp, !whatsapp.isEmpty else { return nil }
+        return Formatters.whatsAppProductURL(
+            title: product.title,
+            price: Formatters.money(product.actualPrice),
+            whatsapp: whatsapp
+        )
     }
 }

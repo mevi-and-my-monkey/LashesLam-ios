@@ -19,12 +19,19 @@ struct MainTabView: View {
             CatalogHomeView()
                 .tabItem { Label("Inicio", systemImage: "house.fill") }
 
-            // El carrito se oculta para administradores, igual que en Android.
+            // Favoritos y Carrito solo para usuarios (no admin), igual que Android.
             if !session.isUserAdmin {
+                NavigationStack { FavoritesView() }
+                    .tabItem { Label("Favoritos", systemImage: "heart.fill") }
+
                 CartView()
                     .tabItem { Label("Carrito", systemImage: "cart.fill") }
                     .badge(cart.count)
             }
+
+            // "Ordenes": solicitudes (admin) / mis pedidos (usuario). Presente en ambos.
+            NavigationStack { RequestsView(isAdmin: session.isUserAdmin) }
+                .tabItem { Label("Ordenes", systemImage: "bag.fill") }
 
             ProfilePageView(onLogout: onLogout)
                 .tabItem { Label("Perfil", systemImage: "person.fill") }

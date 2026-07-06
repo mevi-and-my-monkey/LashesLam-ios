@@ -29,9 +29,7 @@ struct AvailabilityEditorView: View {
                 slotsList
             }
 
-            if viewModel.isLoading {
-                ZStack { Color.black.opacity(0.15).ignoresSafeArea(); ProgressView().tint(AppColors.pinkPrimary) }
-            }
+            GenericLoading(isLoading: viewModel.isLoading)
         }
         .navigationTitle("Disponibilidad")
         .navigationBarTitleDisplayMode(.inline)
@@ -42,12 +40,7 @@ struct AvailabilityEditorView: View {
         }
         .onAppear { viewModel.load() }
         .onChange(of: viewModel.saved) { if $0 { dismiss() } }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .errorDialog($viewModel.errorMessage)
     }
 
     private var servicePicker: some View {

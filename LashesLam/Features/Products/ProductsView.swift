@@ -45,7 +45,7 @@ struct ProductsView: View {
         .background(AppColors.background.ignoresSafeArea())
         .overlay {
             if viewModel.isLoading {
-                ProgressView().tint(AppColors.pinkPrimary)
+                LottieView(name: "loading").frame(width: 100, height: 100)
             } else if viewModel.filteredProducts.isEmpty && viewModel.bestSellingProducts.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "bag").font(.system(size: 44)).foregroundColor(.gray.opacity(0.5))
@@ -54,12 +54,7 @@ struct ProductsView: View {
                 }
             }
         }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { if !$0 { viewModel.errorMessage = nil } })
-        ) {
-            Button("OK", role: .cancel) { viewModel.errorMessage = nil }
-        } message: { Text(viewModel.errorMessage ?? "") }
+        .errorDialog($viewModel.errorMessage)
         .onAppear { if viewModel.products.isEmpty { viewModel.load() } }
         .refreshable { viewModel.load() }
     }
